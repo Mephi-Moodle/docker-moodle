@@ -1,5 +1,6 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 MAINTAINER Sergio Gómez <sergio@quaip.com>
+MAINTAINER Anatoly Maltsev <malcevanatoly@gmail.com>
 
 # Keep upstart from complaining
 RUN dpkg-divert --local --rename --add /sbin/initctl
@@ -10,12 +11,13 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
 RUN apt-get -y upgrade
- 
+
 # Basic Requirements
 RUN apt-get -y install mysql-server mysql-client pwgen python-setuptools curl git unzip
 
+#PHP moodle needs new updated php version
 # Moodle Requirements
-RUN apt-get -y install apache2 php5 php5-gd libapache2-mod-php5 postfix wget supervisor php5-pgsql vim curl libcurl3 libcurl3-dev php5-curl php5-xmlrpc php5-intl php5-mysql
+RUN apt-get -y install apache2 php7.0 php7.0-gd libapache2-mod-php7.0 postfix wget supervisor php7.0-pgsql vim curl libcurl3 libcurl3-dev php7.0-curl php7.0-xmlrpc php7.0-intl php7.0-mysql php7.0-xml php7.0-json php7.0-zip php7.0-mbstring php7.0-soap
 
 # SSH
 RUN apt-get -y install openssh-server
@@ -29,9 +31,9 @@ ADD ./start.sh /start.sh
 ADD ./foreground.sh /etc/apache2/foreground.sh
 ADD ./supervisord.conf /etc/supervisord.conf
 
-ADD https://download.moodle.org/moodle/moodle-latest.tgz /var/www/moodle-latest.tgz
-RUN cd /var/www; tar zxvf moodle-latest.tgz; mv /var/www/moodle /var/www/html
-RUN chown -R www-data:www-data /var/www/html/moodle
+#ADD https://download.moodle.org/moodle/moodle-latest.tgz /var/www/moodle-latest.tgz
+#RUN cd /var/www; tar zxvf moodle-latest.tgz; mv /var/www/moodle /var/www/html
+#RUN chown -R www-data:www-data /var/www/html/moodle
 RUN mkdir /var/moodledata
 RUN chown -R www-data:www-data /var/moodledata; chmod 777 /var/moodledata
 RUN chmod 755 /start.sh /etc/apache2/foreground.sh

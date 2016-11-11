@@ -17,15 +17,17 @@ if [ ! -f /var/www/html/moodle/config.php ]; then
   echo $MOODLE_PASSWORD > /moodle-db-pw.txt
   echo $SSH_PASSWORD > /ssh-pw.txt
 
-  sed -e "s/pgsql/mysqli/
-  s/username/moodle/
-  s/password/$MOODLE_PASSWORD/
-  s/example.com/$VIRTUAL_HOST/
-  s/\/home\/example\/moodledata/\/var\/moodledata/" /var/www/html/moodle/config-dist.php > /var/www/html/moodle/config.php
+  if [ -f /var/www/html/moodle/config-dist.php ]; then
+    sed -e "s/pgsql/mysqli/
+    s/username/moodle/
+    s/password/$MOODLE_PASSWORD/
+    s/example.com/$VIRTUAL_HOST/
+    s/\/home\/example\/moodledata/\/var\/moodledata/" /var/www/html/moodle/config-dist.php > /var/www/html/moodle/config.php
+
+    chown www-data:www-data /var/www/html/moodle/config.php
+  fi
 
   sed -i 's/PermitRootLogin without-password/PermitRootLogin Yes/' /etc/ssh/sshd_config
-
-  chown www-data:www-data /var/www/html/moodle/config.php
 
   mysqladmin -u root password $MYSQL_PASSWORD
   mysql -uroot -p$MYSQL_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$MYSQL_PASSWORD' WITH GRANT OPTION; FLUSH PRIVILEGES;"
