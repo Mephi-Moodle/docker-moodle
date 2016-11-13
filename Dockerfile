@@ -1,5 +1,4 @@
 FROM ubuntu:16.04
-MAINTAINER Sergio Gómez <sergio@quaip.com>
 MAINTAINER Anatoly Maltsev <malcevanatoly@gmail.com>
 
 # Keep upstart from complaining
@@ -13,7 +12,10 @@ RUN apt-get update
 RUN apt-get -y upgrade
 
 # Basic Requirements
-RUN apt-get -y install mysql-server mysql-client pwgen python-setuptools curl git unzip
+RUN apt-get -y install mysql-server mysql-client pwgen python-setuptools curl git unzip 
+
+# Setup HTTPS
+RUN apt-get -y install python-letsencrypt-apache
 
 #PHP moodle needs new updated php version
 # Moodle Requirements

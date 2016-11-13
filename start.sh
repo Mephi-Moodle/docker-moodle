@@ -27,6 +27,14 @@ if [ ! -f /var/www/html/moodle/config.php ]; then
     chown www-data:www-data /var/www/html/moodle/config.php
   fi
 
+  if [ ! -z "$VIRTUAL_HOST" ]; then
+    letsencrypt --agree-tos --apache -d $VIRTUAL_HOST
+    crontab -l > cron.tmp
+    echo "30 2 * * 1 /usr/bin/letsencrypt renew >> /var/log/le-renew.log" >> cron.tmp
+    crontab cron.tmp
+    rm cron.tmp
+  fi
+
   sed -i 's/PermitRootLogin without-password/PermitRootLogin Yes/' /etc/ssh/sshd_config
 
   mysqladmin -u root password $MYSQL_PASSWORD
