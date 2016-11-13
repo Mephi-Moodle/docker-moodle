@@ -28,7 +28,7 @@ if [ ! -f /var/www/html/moodle/config.php ]; then
   fi
 
   if [ ! -z "$VIRTUAL_HOST" ]; then
-    letsencrypt --agree-tos --apache -d $VIRTUAL_HOST
+    letsencrypt --email $LE_EMAIL --agree-tos --apache -d $VIRTUAL_HOST
     crontab -l > cron.tmp
     echo "30 2 * * 1 /usr/bin/letsencrypt renew >> /var/log/le-renew.log" >> cron.tmp
     crontab cron.tmp

@@ -15,7 +15,7 @@ RUN apt-get -y upgrade
 RUN apt-get -y install mysql-server mysql-client pwgen python-setuptools curl git unzip 
 
 # Setup HTTPS
-RUN apt-get -y install python-letsencrypt-apache
+RUN apt-get -y install python-letsencrypt-apache cron
 
 #PHP moodle needs new updated php version
 # Moodle Requirements
